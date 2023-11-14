@@ -7,6 +7,6 @@ RUN apt-key adv --fetch-keys https://download.docker.com/linux/debian/gpg && \
   apt-get update && apt-get -y upgrade && apt-get install -y docker-ce-cli wget && \
   rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -g 992 docker && usermod -aG docker jenkins
+RUN groupadd -g 999 docker && usermod -aG docker jenkins
 
 ENTRYPOINT ["setup-sshd"]
