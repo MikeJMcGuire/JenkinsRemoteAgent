@@ -11,4 +11,8 @@ RUN apt-key adv --fetch-keys https://download.docker.com/linux/debian/gpg && \
 
 RUN groupadd -g 998 docker && usermod -aG docker jenkins
 
+COPY *.crt /usr/local/share/ca-certificates
+
+RUN update-ca-certificates
+
 ENTRYPOINT ["setup-sshd"]
