@@ -1,6 +1,6 @@
 FROM jenkins/ssh-agent:latest-debian-jdk11
 
-RUN apt-get update && apt-get install -y gnupg2
+RUN apt-get update && apt-get install -y gnupg2 curl
 
 RUN groupadd -g 998 docker && usermod -aG docker jenkins
 
