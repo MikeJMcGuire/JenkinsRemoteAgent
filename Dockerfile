@@ -1,4 +1,4 @@
-FROM jenkins/ssh-agent:latest-debian-jdk11
+FROM jenkins/ssh-agent:latest-debian-jdk21
 
 RUN apt-get update && apt-get install -y gnupg2 curl
 
