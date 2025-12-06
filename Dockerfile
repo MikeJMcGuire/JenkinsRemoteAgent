@@ -22,4 +22,7 @@ Components: stable
 Signed-By: /etc/apt/keyrings/docker.asc
 EOF
 
+RUN apt-get update && apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
+  rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["setup-sshd"]
