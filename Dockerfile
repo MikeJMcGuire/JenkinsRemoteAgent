@@ -1,6 +1,6 @@
 FROM jenkins/ssh-agent:latest-debian-jdk25
 
-RUN apt-get update && apt-get install -y gnupg2 curl
+RUN apt-get update && apt-get install -y gnupg2 curl ca-certificates
 
 RUN groupadd -g 900 docker && usermod -aG docker jenkins
 
@@ -10,9 +10,17 @@ RUN update-ca-certificates
 
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
-RUN apt-key adv --fetch-keys https://download.docker.com/linux/debian/gpg && \
-  echo "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/debian $(grep "VERSION_CODENAME=" /etc/os-release | awk -F= {' print $2'} | sed s/\"//g) stable" >> /etc/apt/sources.list && \
-  apt-get update && apt-get -y upgrade && apt-get install -y docker-ce-cli wget && \
-  rm -rf /var/lib/apt/lists/*
+RUN install -m 0755 -d /etc/apt/keyrings && \
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
+  chmod a+r /etc/apt/keyrings/docker.asc && \
+  tee /etc/apt/sources.list.d/docker.sources <<EOF && \
+  Types: deb && \
+  URIs: https://download.docker.com/linux/ubuntu && \
+  Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") && \
+  Components: stable && \
+  Signed-By: /etc/apt/keyrings/docker.asc && \
+  EOF
+
+
 
 ENTRYPOINT ["setup-sshd"]
